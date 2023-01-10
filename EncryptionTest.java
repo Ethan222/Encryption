@@ -16,5 +16,7 @@ public class EncryptionTest
       e.betaEncrypt();
       System.out.println(e);
       
+      e.gammaEncrypt();
+      System.out.println(e);
    }
 }

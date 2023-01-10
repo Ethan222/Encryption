@@ -104,36 +104,33 @@ public class Encryption2
       encrypted = temp;
    }
    
-   /*
    // encrypts roman numerals to morse code
-   private static void gammaEncrypt()
+   public void gammaEncrypt()
    {
       final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
       
-      String temp = "";
-      for(int i = 0; i < encrypted.length(); i++)
+      // space out roman numerals
+      for(int i = 0; i < encrypted.length; i++)
       {
-         int index = 
-         temp[i] = alphaEncrypt(arr[i]);
+         String temp = encrypted[i][0];
+         encrypted[i] = new String[temp.length()];
+         for(int j = 0; j < encrypted[i].length; j++)
+            encrypted[i][j] = temp.substring(j, j + 1);
       }
-      
-//       for(int[] outer : temp)
-//       {
-//          for(int inner : outer)
-//             System.out.print(inner + " ");
-//          System.out.println();
-//       }
+
+      String[][] temp = alphaEncrypt(encrypted);
       
       for(int i = 0; i < temp.length; i++)
       {
-         gamma[i] = new String[temp[i].length];
          for(int j = 0; j < temp[i].length; j++)
          {
-            gamma[i][j] = MORSE[temp[i][j]];
+            temp[i][j] = MORSE[Integer.parseInt(temp[i][j])];
          }
       }
-      return gamma;
+      
+      encrypted = temp;
    }
+   /*
    private static String[][] deltaEncrypt(String[][] arr)
    {
       String[][] delta = new String[arr.length][];
