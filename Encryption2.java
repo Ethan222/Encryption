@@ -1,11 +1,11 @@
 // Alpha-Beta-Gamma Encryption
 
-import java.util.*;
-
 public class Encryption2
 {
    private String original;
    private String[][] encrypted;
+   private enum status {UNENCRYPTED, ALPHA, BETA, GAMMA, DELTA};
+   private status encryption = status.UNENCRYPTED;
    
    public Encryption2()
    {
@@ -31,6 +31,9 @@ public class Encryption2
    
    public String toString()
    {
+      if(encryption == status.UNENCRYPTED)
+         return original;
+      
       String temp = "";
       for(String[] arr : encrypted)
       {
@@ -45,6 +48,7 @@ public class Encryption2
    public void alphaEncrypt()
    {
       encrypted = this.alphaEncrypt(encrypted);
+      encryption = status.ALPHA;
    }
    
    private String[][] alphaEncrypt(String[][] orig)
@@ -64,6 +68,9 @@ public class Encryption2
    // encrypt ints to roman numerals
    public void betaEncrypt()
    {
+      if(encryption == status.UNENCRYPTED)
+         alphaEncrypt();
+      
       String[][] temp = new String[encrypted.length][];
       for(int i = 0; i < temp.length; i++)
       {
@@ -102,11 +109,15 @@ public class Encryption2
          }
       }
       encrypted = temp;
+      encryption = status.BETA;
    }
    
    // encrypts roman numerals to morse code
    public void gammaEncrypt()
    {
+      if(encryption != status.BETA) // unencrypted or alpha
+         betaEncrypt();
+      
       final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
       
       // space out roman numerals
@@ -127,13 +138,16 @@ public class Encryption2
             temp[i][j] = MORSE[Integer.parseInt(temp[i][j])];
          }
       }
-      
       encrypted = temp;
+      encryption = status.GAMMA;
    }
    
    // morse to binary
    public void deltaEncrypt()
    {
+      if(encryption != status.GAMMA)   // unencrypted, alpha, or beta
+         gammaEncrypt();
+      
       String[][] delta = new String[encrypted.length][];
       for(int i = 0; i < delta.length; i++)
       {
@@ -146,6 +160,7 @@ public class Encryption2
          }
       }
       encrypted = delta;
+      encryption = status.DELTA;
    }
    
 }
