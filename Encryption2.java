@@ -9,7 +9,7 @@ public class Encryption2
    
    public Encryption()
    {
-      setData("");
+      this("");
    }
    
    public Encryption(String s)
