@@ -21,5 +21,8 @@ public class EncryptionTest
       */
       e.deltaEncrypt();
       System.out.println(e);
+
+      e.deltaDecrypt();
+      System.out.println(e);
    }
 }

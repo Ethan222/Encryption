@@ -163,4 +163,22 @@ public class Encryption2
       encryption = status.DELTA;
    }
    
+   /////////// DECRYPTION ///////////
+   // binary to morse
+   public void deltaDecrypt()
+   {
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < encrypted[i].length; j++)
+         {
+            temp[i][j] = "";
+            for(int k = 0; k < encrypted[i][j].length(); k++)
+               temp[i][j] += encrypted[i][j].charAt(k) == '1' ? "-" : ".";
+         }
+      }
+      encrypted = temp;
+      encryption = status.GAMMA;
+   }
 }
