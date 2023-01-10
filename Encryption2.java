@@ -130,22 +130,22 @@ public class Encryption2
       
       encrypted = temp;
    }
-   /*
-   private static String[][] deltaEncrypt(String[][] arr)
+   
+   // morse to binary
+   public void deltaEncrypt()
    {
-      String[][] delta = new String[arr.length][];
-      for(int i = 0; i < arr.length; i++)
+      String[][] delta = new String[encrypted.length][];
+      for(int i = 0; i < delta.length; i++)
       {
-         delta[i] = new String[arr[i].length];
-         for(int j = 0; j < arr[i].length; j++)
+         delta[i] = new String[encrypted[i].length];
+         for(int j = 0; j < delta[i].length; j++)
          {
-            String s = "";
-            for(int k = 0; k < arr[i][j].length(); k++)
-               s += (arr[i][j].charAt(k) == '-' ? "1" : "0");
-            delta[i][j] = s;
+            delta[i][j] = "";
+            for(int k = 0; k < encrypted[i][j].length(); k++)
+               delta[i][j] += (encrypted[i][j].charAt(k) == '-' ? "1" : "0");
          }
       }
-      return delta;
+      encrypted = delta;
    }
-   */
+   
 }

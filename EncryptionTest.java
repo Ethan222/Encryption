@@ -18,5 +18,8 @@ public class EncryptionTest
       
       e.gammaEncrypt();
       System.out.println(e);
+
+      e.deltaEncrypt();
+      System.out.println(e);
    }
 }
