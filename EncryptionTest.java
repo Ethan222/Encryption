@@ -6,8 +6,9 @@ public class EncryptionTest
    {
       Scanner input = new Scanner(System.in);
       
-      Encryption e = new Encryption(input.nextLine());
-      
+      Encryption2 e = new Encryption2(input.nextLine());
+      System.out.println(e.getData());
+      /*
       int[] alpha = alphaEncrypt(str);
       for(int n : alpha)
          System.out.print(n + " ");
@@ -33,5 +34,6 @@ public class EncryptionTest
             System.out.print(e + " ");
          System.out.println();
       }
+      */
    }
 }

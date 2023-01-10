@@ -5,14 +5,14 @@ import java.util.*;
 public class Encryption2
 {
    private String original;
-   private String encrypted;
+   private String[][] encrypted;
    
-   public Encryption()
+   public Encryption2()
    {
-      this("");
+      setData("");
    }
    
-   public Encryption(String s)
+   public Encryption2(String s)
    {
       setData(s);
    }
@@ -20,14 +20,27 @@ public class Encryption2
    public void setData(String s)
    {
       original = s;
-      encrypted = original.toUpperCase();
+      String temp = original.toUpperCase();
+      encrypted = new String[s.length()][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         encrypted[i] = new String[1];
+         encrypted[i][0] = temp.substring(i, i + 1);
+      }
    }
    
    public String getData()
    {
-      return encrypted;
+      String temp = "";
+      for(String[] arr : encrypted)
+      {
+         for(String s : arr)
+            temp += s + " ";
+         temp += ", ";
+      }
+      return temp;
    }
-   
+   /*
    private String[] parseString(String s)
    {
       int count = 0;
@@ -45,7 +58,7 @@ public class Encryption2
       
       return arr;
    }
-   
+
    // encrypt letters to ints
    public void alphaEncrypt()
    {
@@ -147,4 +160,5 @@ public class Encryption2
       }
       return delta;
    }
+   */
 }
