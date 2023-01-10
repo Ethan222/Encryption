@@ -7,13 +7,12 @@ public class EncryptionTest
       Scanner input = new Scanner(System.in);
       
       Encryption2 e = new Encryption2(input.nextLine());
-      System.out.println(e.getData());
-      /*
-      int[] alpha = alphaEncrypt(str);
-      for(int n : alpha)
-         System.out.print(n + " ");
-      System.out.println();
+      System.out.println(e);
       
+      e.alphaEncrypt();
+      System.out.println(e);
+      
+      /*
       String[] beta = betaEncrypt(alpha);
       for(String e : beta)
          System.out.print(e + " ");

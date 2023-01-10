@@ -29,7 +29,7 @@ public class Encryption2
       }
    }
    
-   public String getData()
+   public String toString()
    {
       String temp = "";
       for(String[] arr : encrypted)
@@ -40,44 +40,28 @@ public class Encryption2
       }
       return temp;
    }
-   /*
-   private String[] parseString(String s)
-   {
-      int count = 0;
-      for(int i = 0; i < s.length(); i++)
-         if(s.charAt(i) == ' ')
-            count++;
-      
-      String[] arr = new String[count];
-      for(int i = 0; i < arr.length; i++)
-      {
-         int index = s.indexOf(" ");
-         arr[i] = s.substring(0, index);
-         s = s.substring(index + 1, s.length());
-      }
-      
-      return arr;
-   }
-
+   
    // encrypt letters to ints
    public void alphaEncrypt()
    {
-      encrypted = Encryption.alphaEncrypt(encrypted);
+      encrypted = this.alphaEncrypt(encrypted);
    }
    
-   private static String alphaEncrypt(String s)
+   private String[][] alphaEncrypt(String[][] orig)
    {
-      String temp = "";
-      for(int i = 0; i < s.length(); i++)
+      String[][] temp = new String[orig.length][];
+      for(int i = 0; i < orig.length; i++)
       {
-         if(s.charAt(i) != " ")
-            temp += ((int)s.charAt(i) - 64) + " ";
-         else
-            temp = temp.substring(0, temp.length() - 1) + "|";
+         temp[i] = new String[orig[i].length];
+         for(int j = 0; j < orig[i].length; j++)
+         {
+            temp[i][j] = (int)orig[i][j].charAt(0) - 64 + "";
+         }
       }
       return temp;
    }
    
+   /*
    // encrypt ints to roman numerals
    public void betaEncrypt()
    {
