@@ -1,11 +1,10 @@
 // Alpha-Beta-Gamma Encryption
 
-import java.util.*;
-
 public class Encryption2
 {
    private String original;
    private String[][] encrypted;
+   private boolean isEncrypted = false;
    
    public Encryption2()
    {
@@ -31,6 +30,9 @@ public class Encryption2
    
    public String toString()
    {
+      if(!isEncrypted)
+         return original;
+      
       String temp = "";
       for(String[] arr : encrypted)
       {
@@ -45,6 +47,7 @@ public class Encryption2
    public void alphaEncrypt()
    {
       encrypted = this.alphaEncrypt(encrypted);
+      isEncrypted = true;
    }
    
    private String[][] alphaEncrypt(String[][] orig)
@@ -102,6 +105,7 @@ public class Encryption2
          }
       }
       encrypted = temp;
+      isEncrypted = true;
    }
    
    // encrypts roman numerals to morse code
@@ -127,8 +131,8 @@ public class Encryption2
             temp[i][j] = MORSE[Integer.parseInt(temp[i][j])];
          }
       }
-      
       encrypted = temp;
+      isEncrypted = true;
    }
    
    // morse to binary
@@ -146,6 +150,7 @@ public class Encryption2
          }
       }
       encrypted = delta;
+      isEncrypted = true;
    }
    
 }
