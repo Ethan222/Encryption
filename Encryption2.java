@@ -61,44 +61,50 @@ public class Encryption2
       return temp;
    }
    
-   /*
    // encrypt ints to roman numerals
    public void betaEncrypt()
    {
-      String temp = "";
-      int n;
-      for(int i = 0; i < encrypted.length(); i++)
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < temp.length; i++)
       {
-         int index = encrypted.indexOf(" ", i);
-         n = Integer.parseInt(encrypted.substring(i, index));
-         i = index;
-         while(n >= 10)
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < temp[i].length; j++)
+            temp[i][j] = "";
+      }
+      int n;
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         for(int j = 0; j < encrypted[i].length; j++)
          {
-            String += "X";
+            n = Integer.parseInt(encrypted[i][j]);
+            while(n >= 10)
+            {
+            temp[i][j] += "X";
             n -= 10;
-         }
-         if(n == 4)
-            temp += "IV";
-         else if(n == 9)
-            temp += "IX";
-         else
-         {
-            if(n >= 5)
-            {
-               temp += "V";
-               n -= 5;
             }
-            while(n >= 1)
+            if(n == 4)
+               temp[i][j] += "IV";
+            else if(n == 9)
+               temp[i][j] += "IX";
+            else
             {
-               temp += "I";
-               n--;
+               if(n >= 5)
+               {
+                  temp[i][j] += "V";
+                  n -= 5;
+               }
+               while(n >= 1)
+               {
+                  temp[i][j] += "I";
+                  n--;
+               }
             }
          }
-         temp += " ";
       }
       encrypted = temp;
    }
    
+   /*
    // encrypts roman numerals to morse code
    private static void gammaEncrypt()
    {
