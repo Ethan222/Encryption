@@ -19,10 +19,10 @@ public class EncryptionTest
       e.gammaEncrypt();
       System.out.println(e);
       */
-      e.deltaEncrypt();
+      e.betaEncrypt();
       System.out.println(e);
 
-      e.deltaDecrypt();
+      e.betaDecrypt();
       System.out.println(e);
    }
 }
