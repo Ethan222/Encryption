@@ -6,6 +6,7 @@ public class Encryption2
    private String[][] encrypted;
    private enum status {UNENCRYPTED, ALPHA, BETA, GAMMA, DELTA};
    private status encryption = status.UNENCRYPTED;
+   final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
    
    public Encryption2()
    {
@@ -47,22 +48,17 @@ public class Encryption2
    // encrypt letters to ints
    public void alphaEncrypt()
    {
-      encrypted = this.alphaEncrypt(encrypted);
-      encryption = status.ALPHA;
-   }
-   
-   private String[][] alphaEncrypt(String[][] orig)
-   {
-      String[][] temp = new String[orig.length][];
-      for(int i = 0; i < orig.length; i++)
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
       {
-         temp[i] = new String[orig[i].length];
-         for(int j = 0; j < orig[i].length; j++)
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < encrypted[i].length; j++)
          {
-            temp[i][j] = (int)orig[i][j].charAt(0) - 64 + "";
+            temp[i][j] = (int)encrypted[i][j].charAt(0) - 64 + "";
          }
       }
-      return temp;
+      encrypted = temp;
+      encryption = status.ALPHA;
    }
    
    // encrypt ints to roman numerals
@@ -86,8 +82,8 @@ public class Encryption2
             n = Integer.parseInt(encrypted[i][j]);
             while(n >= 10)
             {
-            temp[i][j] += "X";
-            n -= 10;
+               temp[i][j] += "X";
+               n -= 10;
             }
             if(n == 4)
                temp[i][j] += "IV";
@@ -117,9 +113,7 @@ public class Encryption2
    {
       if(encryption != status.BETA) // unencrypted or alpha
          betaEncrypt();
-      
-      final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
-      
+            
       // space out roman numerals
       for(int i = 0; i < encrypted.length; i++)
       {
@@ -129,7 +123,8 @@ public class Encryption2
             encrypted[i][j] = temp.substring(j, j + 1);
       }
 
-      String[][] temp = alphaEncrypt(encrypted);
+      alphaEncrypt();
+      String[][] temp = encrypted;
       
       for(int i = 0; i < temp.length; i++)
       {
@@ -163,4 +158,118 @@ public class Encryption2
       encryption = status.DELTA;
    }
    
+   /////////// DECRYPTION ///////////
+   // binary to morse
+   public void deltaDecrypt()
+   {
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < encrypted[i].length; j++)
+         {
+            temp[i][j] = "";
+            for(int k = 0; k < encrypted[i][j].length(); k++)
+               temp[i][j] += encrypted[i][j].charAt(k) == '1' ? "-" : ".";
+         }
+      }
+      encrypted = temp;
+      encryption = status.GAMMA;
+   }
+
+   // morse to roman numerals
+   public void gammaDecrypt()
+   {
+      if(encryption == status.DELTA)
+         deltaDecrypt();
+      
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < encrypted[i].length; j++)
+         {
+            //System.out.print(encrypted[i][j] + " ");
+            for(int ii = 1; ii < MORSE.length; ii++)
+            {
+               if(encrypted[i][j].equals(MORSE[ii]))
+               {
+                  temp[i][j] = ii + "";
+                  //System.out.print(encrypted[i][j] + "," + temp[i][j] + " ");
+               }
+            }
+            //System.out.print(". ");
+         }
+         //System.out.print("| ");
+      }
+      //System.out.println();
+      
+      encrypted = temp;
+      alphaDecrypt();
+      encryption = status.BETA;
+   }
+
+   // roman numerals to numbers
+   public void betaDecrypt()
+   {
+      if(encryption != status.BETA)
+         gammaDecrypt();
+      
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         // compress roman numerals
+         String r = "";
+         for(int j = 0; j < encrypted[i].length; j++)
+            r += encrypted[i][j];
+         
+         temp[i] = new String[1];
+         int n = 0, j = r.length() - 1;
+         while(j >= 0 && r.charAt(j) == 'I')
+         {
+            n++;
+            j--;
+         }
+         // check for IV and IX
+         if(j >= 1 && r.substring(j - 1, j + 1).equals("IV"))
+         {
+            n += 4;
+            j -= 2;
+         }
+         else if(j >= 1 && r.substring(j - 1, j + 1).equals("IX"))
+         {
+            n += 9;
+            j -= 2;
+         }
+         if(j >= 0 && r.charAt(j) == 'V')
+         {
+            n += 5;
+            j--;
+         }
+         while(j >= 0 && r.charAt(j) == 'X')
+         {
+            n += 10;
+            j--;
+         }
+         temp[i][0] = n + "";
+      }
+      encrypted = temp;
+      encryption = status.ALPHA;
+   }
+
+   // numbers to letters
+   public void alphaDecrypt()
+   {
+      String[][] temp = new String[encrypted.length][];
+      for(int i = 0; i < encrypted.length; i++)
+      {
+         temp[i] = new String[encrypted[i].length];
+         for(int j = 0; j < encrypted[i].length; j++)
+         {
+            temp[i][j] = (char)(Integer.parseInt(encrypted[i][j]) + 64) + "";
+         }
+      }
+      encrypted = temp;
+      encryption = status.UNENCRYPTED;
+   }
 }
