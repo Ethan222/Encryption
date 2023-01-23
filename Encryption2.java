@@ -4,7 +4,7 @@ public class Encryption2
 {
    private String original;
    private String[][] encrypted;
-   private enum status {UNENCRYPTED, ALPHA, BETA, GAMMA, DELTA};
+   private enum status {UNENCRYPTED, ALPHA, BETA, GAMMA, DELTA, OMEGA};
    private status encryption = status.UNENCRYPTED;
    final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
    
