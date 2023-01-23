@@ -8,30 +8,41 @@ public class EncryptionTest
       
       System.out.print("Enter data to be encrypted: ");
       Encryption2 e = new Encryption2(input.nextLine());
-      //System.out.println(e);
+      print(e);
       
       e.alphaEncrypt();
-      System.out.println(e);
-      
+      print(e);
+
       e.betaEncrypt();
-      System.out.println(e);
-      
+      print(e);
+            
       e.gammaEncrypt();
-      System.out.println(e);
-      
+      print(e);
+            
       e.deltaEncrypt();
-      System.out.println(e);
-
+      print(e);
+      
+      e.omegaEncrypt();
+      print(e);
+      
+      e.omegaDecrypt();
+      print(e);
+      
       e.deltaDecrypt();
-      System.out.println(e);
-
+      print(e);
+      
       e.gammaDecrypt();
-      System.out.println(e);
-
+      print(e);
+      
       e.betaDecrypt();
-      System.out.println(e);
-
+      print(e);
+      
       e.alphaDecrypt();
-      System.out.println(e);
+      print(e);
+   }
+
+   private static void print(Encryption2 e)
+   {
+      System.out.printf("%s: %s \n", e.getStatus(), e);
    }
 }
