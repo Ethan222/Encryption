@@ -3,7 +3,7 @@
 public class Encryption2
 {
    private String original;   // the original data
-   private String[][] encrypted; // the encrypted data
+   private String[][][] encrypted; // the encrypted data
    private enum status {UNENCRYPTED, ALPHA, BETA, GAMMA, DELTA, OMEGA};
    private status encryption = status.UNENCRYPTED; // which encryption the data is encrypted to
    private final String[] MORSE = { "", ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", "-.-", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
@@ -22,25 +22,46 @@ public class Encryption2
    {
       original = s;
       String temp = original.toUpperCase();
-      encrypted = new String[s.length()][];
-      for(int i = 0; i < encrypted.length; i++)
+      int numWords = countSpaces(s) + 1;
+      encrypted = new String[numWords][][];
+      int begin = 0, end = 0;
+      for(int i = 0; i < numWords; i++)
       {
-         encrypted[i] = new String[1];
-         encrypted[i][0] = temp.substring(i, i + 1);
+         end = s.indexOf(" ", begin + 1);
+         String word = temp.substring(begin, end != -1 ? end : temp.length());
+         encrypted[i] = new String[word.length()][1];
+         for(int j = 0; j < word.length(); j++)
+            encrypted[i][j][0] = word.substring(j, j + 1);
       }
+   }
+
+   private static int countSpaces(String s)
+   {
+      int c = 0;
+      int psn = s.indexOf(" ");
+      while(psn != -1)
+      {
+         c++;
+         psn = s.indexOf(" ", psn + 1);
+      }
+      return c;
    }
    
    public String toString()
    {
-      if(encryption == status.UNENCRYPTED)
-         return original;
-      
+      //if(encryption == status.UNENCRYPTED)
+         //return original;
+      // work on this
       String temp = "";
-      for(String[] arr : encrypted)
+      for(String[][] word : encrypted)
       {
-         for(String s : arr)
-            temp += s + " ";
-         temp += ", ";
+         for(String[] letter : word)
+         {
+            for(String s : letter)
+               temp += s + " ";
+            temp += "  ";
+         }
+         temp += "|   ";
       }
       return temp;
    }
@@ -52,13 +73,15 @@ public class Encryption2
    
    public void alphaEncrypt()   // encrypt letters to ints
    {
-      String[][] temp = new String[encrypted.length][];
-      for(int i = 0; i < encrypted.length; i++)
+      String[][][] temp = new String[encrypted.length][][];
+      for(int i = 0; i < temp.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
-         for(int j = 0; j < encrypted[i].length; j++)
+         temp[i] = new String[encrypted[i].length][];
+         for(int j = 0; j < temp[i].length; j++)
          {
-            temp[i][j] = (int)encrypted[i][j].charAt(0) - 64 + "";
+            temp[i][j] = new String[encrypted[i][j].length];
+            for(int k = 0; k < temp[i][j].length; k++)
+               temp[i][j][k] = (int)encrypted[i][j][k].charAt(0) - 64 + "";
          }
       }
       encrypted = temp;
@@ -70,38 +93,38 @@ public class Encryption2
       if(encryption == status.UNENCRYPTED)
          alphaEncrypt();
       
-      String[][] temp = new String[encrypted.length][];
+      String[][][] temp = new String[encrypted.length][][];
       for(int i = 0; i < temp.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
+         temp[i] = new String[encrypted[i].length][1];
          for(int j = 0; j < temp[i].length; j++)
-            temp[i][j] = "";
+            temp[i][j][0] = "";
       }
       int n;
-      for(int i = 0; i < encrypted.length; i++)
+      for(int i = 0; i < temp.length; i++)
       {
-         for(int j = 0; j < encrypted[i].length; j++)
+         for(int j = 0; j < temp[i].length; j++)
          {
-            n = Integer.parseInt(encrypted[i][j]);
+            n = Integer.parseInt(encrypted[i][j][0]);
             while(n >= 10)
             {
-               temp[i][j] += "X";
+               temp[i][j][0] += "X";
                n -= 10;
             }
             if(n == 4)
-               temp[i][j] += "IV";
+               temp[i][j][0] += "IV";
             else if(n == 9)
-               temp[i][j] += "IX";
+               temp[i][j][0] += "IX";
             else
             {
                if(n >= 5)
                {
-                  temp[i][j] += "V";
+                  temp[i][j][0] += "V";
                   n -= 5;
                }
                while(n >= 1)
                {
-                  temp[i][j] += "I";
+                  temp[i][j][0] += "I";
                   n--;
                }
             }
@@ -117,12 +140,15 @@ public class Encryption2
          betaEncrypt();
             
       // space out roman numerals
-      for(int i = 0; i < encrypted.length; i++)
+      for(int word = 0; word < encrypted.length; word++)
       {
-         String temp = encrypted[i][0];
-         encrypted[i] = new String[temp.length()];
-         for(int j = 0; j < encrypted[i].length; j++)
-            encrypted[i][j] = temp.substring(j, j + 1);
+         for(int letter = 0; letter < encrypted[word].length; letter++)
+         {
+            String temp = encrypted[word][letter][0];
+            encrypted[word][letter] = new String[temp.length()];
+            for(int i = 0; i < encrypted[word][letter].length; i++)
+               encrypted[word][letter][i] = temp.substring(i, i + 1);
+         }
       }
 
       alphaEncrypt();
@@ -134,15 +160,14 @@ public class Encryption2
       if(encryption != status.GAMMA)   // unencrypted, alpha, or beta
          gammaEncrypt();
       
-      String[][] temp = encrypted;
-      for(int i = 0; i < temp.length; i++)
+      for(int i = 0; i < encrypted.length; i++)
       {
-         for(int j = 0; j < temp[i].length; j++)
+         for(int j = 0; j < encrypted[i].length; j++)
          {
-            temp[i][j] = MORSE[Integer.parseInt(temp[i][j])];
+            for(int k = 0; k < encrypted[i][j].length; k++)
+               encrypted[i][j][k] = MORSE[Integer.parseInt(encrypted[i][j][k])];
          }
       }
-      encrypted = temp;
       encryption = status.DELTA;
    }
 
@@ -151,15 +176,19 @@ public class Encryption2
       if(encryption != status.DELTA)
          deltaEncrypt();
       
-      String[][] temp = new String[encrypted.length][];
+      String[][][] temp = new String[encrypted.length][][];
       for(int i = 0; i < temp.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
+         temp[i] = new String[encrypted[i].length][];
          for(int j = 0; j < temp[i].length; j++)
          {
-            temp[i][j] = "";
-            for(int k = 0; k < encrypted[i][j].length(); k++)
-               temp[i][j] += (encrypted[i][j].charAt(k) == '-' ? "1" : "0");
+            temp[i][j] = new String[encrypted[i][j].length];
+            for(int k = 0; k < temp[i][j].length; k++)
+            {
+               temp[i][j][k] = "";
+               for(int ii = 0; ii < encrypted[i][j][k].length(); ii++)
+                  temp[i][j][k] += (encrypted[i][j][k].charAt(ii) == '-' ? "1" : "0");
+            }
          }
       }
       encrypted = temp;
@@ -169,15 +198,19 @@ public class Encryption2
    /////////// DECRYPTION ///////////
    public void omegaDecrypt() // binary to morse
    {
-      String[][] temp = new String[encrypted.length][];
+      String[][][] temp = new String[encrypted.length][][];
       for(int i = 0; i < encrypted.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
+         temp[i] = new String[encrypted[i].length][];
          for(int j = 0; j < encrypted[i].length; j++)
          {
-            temp[i][j] = "";
-            for(int k = 0; k < encrypted[i][j].length(); k++)
-               temp[i][j] += encrypted[i][j].charAt(k) == '1' ? "-" : ".";
+            temp[i][j] = new String[encrypted[i][j].length];
+            for(int k = 0; k < temp[i][j].length; k++)
+            {
+               temp[i][j][k] = "";
+               for(int ii = 0; ii < encrypted[i][j][k].length(); ii++)
+                  temp[i][j][k] += encrypted[i][j][k].charAt(ii) == '1' ? "-" : ".";
+            }
          }
       }
       encrypted = temp;
@@ -189,18 +222,19 @@ public class Encryption2
       if(encryption == status.OMEGA)
          omegaDecrypt();
       
-      String[][] temp = new String[encrypted.length][];
+      String[][][] temp = new String[encrypted.length][][];
       for(int i = 0; i < encrypted.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
+         temp[i] = new String[encrypted[i].length][];
          for(int j = 0; j < encrypted[i].length; j++)
          {
-            //System.out.print(encrypted[i][j] + " ");
-            for(int ii = 1; ii < MORSE.length; ii++)
+            temp[i][j] = new String[encrypted[i][j].length];
+            for(int k = 0; k < temp[i][j].length; k++)
             {
-               if(encrypted[i][j].equals(MORSE[ii]))
+               for(int ii = 1; ii < MORSE.length; ii++)
                {
-                  temp[i][j] = ii + "";
+                  if(encrypted[i][j][k].equals(MORSE[ii]))
+                     temp[i][j][k] = ii + "";
                }
             }
          }
@@ -223,43 +257,47 @@ public class Encryption2
       if(encryption != status.BETA)
          gammaDecrypt();
       
-      String[][] temp = new String[encrypted.length][];
-      for(int i = 0; i < encrypted.length; i++)
+      String[][][] temp = new String[encrypted.length][][];
+      for(int i = 0; i < temp.length; i++)
       {
-         // compress roman numerals
-         String r = "";
-         for(int j = 0; j < encrypted[i].length; j++)
-            r += encrypted[i][j];
-         
-         temp[i] = new String[1];
-         int n = 0, j = r.length() - 1;
-         while(j >= 0 && r.charAt(j) == 'I')
+         temp[i] = new String[encrypted[i].length][1];
+         for(int j = 0; j < temp[i].length; j++)
          {
-            n++;
-            j--;
+            // compress roman numerals
+            String r = "";
+            for(int k = 0; k < encrypted[i][j].length; k++)
+               r += encrypted[i][j][k];
+            
+            temp[i][j] = new String[1];
+            int n = 0, k = r.length() - 1;
+            while(k >= 0 && r.charAt(k) == 'I')
+            {
+               n++;
+               k--;
+            }
+            // check for IV and IX
+            if(k >= 1 && r.substring(k - 1, k + 1).equals("IV"))
+            {
+               n += 4;
+               k -= 2;
+            }
+            else if(k >= 1 && r.substring(k - 1, k + 1).equals("IX"))
+            {
+               n += 9;
+               k -= 2;
+            }
+            if(k >= 0 && r.charAt(k) == 'V')
+            {
+               n += 5;
+               k--;
+            }
+            while(k >= 0 && r.charAt(k) == 'X')
+            {
+               n += 10;
+               k--;
+            }
+            temp[i][j][0] = n + "";
          }
-         // check for IV and IX
-         if(j >= 1 && r.substring(j - 1, j + 1).equals("IV"))
-         {
-            n += 4;
-            j -= 2;
-         }
-         else if(j >= 1 && r.substring(j - 1, j + 1).equals("IX"))
-         {
-            n += 9;
-            j -= 2;
-         }
-         if(j >= 0 && r.charAt(j) == 'V')
-         {
-            n += 5;
-            j--;
-         }
-         while(j >= 0 && r.charAt(j) == 'X')
-         {
-            n += 10;
-            j--;
-         }
-         temp[i][0] = n + "";
       }
       encrypted = temp;
       encryption = status.ALPHA;
@@ -267,13 +305,15 @@ public class Encryption2
 
    public void alphaDecrypt() // numbers to letters
    {
-      String[][] temp = new String[encrypted.length][];
-      for(int i = 0; i < encrypted.length; i++)
+      String[][][] temp = new String[encrypted.length][][];
+      for(int i = 0; i < temp.length; i++)
       {
-         temp[i] = new String[encrypted[i].length];
-         for(int j = 0; j < encrypted[i].length; j++)
+         temp[i] = new String[encrypted[i].length][];
+         for(int j = 0; j < temp[i].length; j++)
          {
-            temp[i][j] = (char)(Integer.parseInt(encrypted[i][j]) + 64) + "";
+            temp[i][j] = new String[encrypted[i][j].length];
+            for(int k = 0; k < temp[i][j].length; k++)
+               temp[i][j][k] = (char)(Integer.parseInt(encrypted[i][j][k]) + 64) + "";
          }
       }
       encrypted = temp;

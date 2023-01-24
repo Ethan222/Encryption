@@ -39,6 +39,7 @@ public class EncryptionTest
       
       e.alphaDecrypt();
       print(e);
+      
    }
 
    private static void print(Encryption2 e)
