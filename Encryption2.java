@@ -44,6 +44,11 @@ public class Encryption2
             c++;
       return c;
    }
+
+   public String[][][] getRawData()
+   {
+      return encrypted;
+   }
    
    public String toString()
    {
