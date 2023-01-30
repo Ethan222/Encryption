@@ -50,7 +50,7 @@ public class Encryption2
       if(encryption == status.UNENCRYPTED)
          return original;
       
-      String temp = "";
+      String temp = "| ";
       for(String[][] word : encrypted)
       {
          for(String[] letter : word)
@@ -59,9 +59,9 @@ public class Encryption2
                temp += s + " ";
             temp += "  ";
          }
-         temp += "|   ";
+         temp = temp.substring(0, temp.length() - 2) + "|\n| ";
       }
-      return temp;
+      return temp.substring(0, temp.length() - 3);
    }
 
    public String getStatus()
