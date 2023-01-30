@@ -32,26 +32,24 @@ public class Encryption2
          encrypted[i] = new String[word.length()][1];
          for(int j = 0; j < word.length(); j++)
             encrypted[i][j][0] = word.substring(j, j + 1);
+         begin = end + 1;
       }
    }
 
    private static int countSpaces(String s)
    {
       int c = 0;
-      int psn = s.indexOf(" ");
-      while(psn != -1)
-      {
-         c++;
-         psn = s.indexOf(" ", psn + 1);
-      }
+      for(int i = 0; i < s.length(); i++)
+         if(s.charAt(i) == ' ')
+            c++;
       return c;
    }
    
    public String toString()
    {
-      //if(encryption == status.UNENCRYPTED)
-         //return original;
-      // work on this
+      if(encryption == status.UNENCRYPTED)
+         return original;
+      
       String temp = "";
       for(String[][] word : encrypted)
       {
